@@ -1,5 +1,9 @@
 {
-	"api_key" :  "YOUR_API_KEY_HERE",
-	"channel_id" : "YOUR_CHANNEL_ID_HERE"
+	"channel_id" : "YOUR_CHANNEL_ID_HERE",
+	"main_video_id" : "YOUR_MAIN_VIDEO_ID_HERE",
+	"first_option_video_id" : "YOUR_FIRST_OPTION_VIDEO_ID_HERE",
+	"second_option_video_id" : "YOUR_SECOND_OPTION_VIDEO_ID_HERE",
+	"third_option_video_id" : "YOUR_THIRD_OPTION_VIDEO_ID_HERE",
+	"fourth_option_video_id" : "YOUR_FOURTH_OPTION_VIDEO_ID_HERE"
 }
 

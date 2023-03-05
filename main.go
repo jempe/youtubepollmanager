@@ -17,7 +17,12 @@ import (
 var localConfig Configuration
 
 type Configuration struct {
-	ChannelID string `json:"channel_id"`
+	ChannelID           string `json:"channel_id"`
+	MainVideoID         string `json:"main_video_id"`
+	FirstOptionVideoID  string `json:"first_option_video_id"`
+	SecondOptionVideoID string `json:"second_option_video_id"`
+	ThirdOptionVideoID  string `json:"third_option_video_id"`
+	FourthOptionVideoID string `json:"fourth_option_video_id"`
 }
 
 func main() {
@@ -25,8 +30,6 @@ func main() {
 	fatalError(err)
 
 	json.Unmarshal(file, &localConfig)
-	// Set up the YouTube API client with OAuth 2 authentication
-	//ctx := context.Background()
 
 	// Replace "PATH_TO_CLIENT_SECRET_JSON_FILE" with the path to your client secret JSON file
 	// You can obtain this file by creating a new OAuth 2 client ID in the Google Cloud Console
@@ -49,20 +52,20 @@ func main() {
 		log.Fatalf("Error creating YouTube client: %v", err)
 	}
 
-	// Call the API to get the channel's statistics
-	channelId := localConfig.ChannelID
-	call := service.Channels.List([]string{"statistics", "snippet"}).Id(channelId)
+	// Call the API to get the video's statistics
+	videoId := localConfig.MainVideoID
+	call := service.Videos.List([]string{"statistics", "snippet"}).Id(videoId)
 	response, err := call.Do()
 	if err != nil {
 		log.Fatalf("Error making API call: %v", err)
 	}
 
-	// Print the channel's statistics
-	channel := response.Items[0]
-	fmt.Printf("Channel: %s\n", channel.Snippet.Title)
-	fmt.Printf("Views: %d\n", channel.Statistics.ViewCount)
-	fmt.Printf("Subscribers: %d\n", channel.Statistics.SubscriberCount)
-	fmt.Printf("Videos: %d\n", channel.Statistics.VideoCount)
+	// Print the video's statistics
+	video := response.Items[0]
+	fmt.Printf("Video: %s\n", video.Snippet.Title)
+	fmt.Printf("Views: %d\n", video.Statistics.ViewCount)
+	fmt.Printf("Likes: %d\n", video.Statistics.LikeCount)
+	fmt.Printf("Dislikes: %d\n", video.Statistics.DislikeCount)
 }
 
 // Helper function to get an OAuth 2 client from the config
