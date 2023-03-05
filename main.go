@@ -17,8 +17,9 @@ import (
 var localConfig Configuration
 
 type Configuration struct {
-	ChannelID   string `json:"channel_id"`
-	MainVideoID string `json:"main_video_id"`
+	ChannelID   string   `json:"channel_id"`
+	MainVideoID string   `json:"main_video_id"`
+	PollOptions []string `json:"poll_options"`
 }
 
 func main() {
@@ -48,20 +49,39 @@ func main() {
 		log.Fatalf("Error creating YouTube client: %v", err)
 	}
 
-	// Call the API to get the video's statistics
-	videoId := localConfig.MainVideoID
-	call := service.Videos.List([]string{"statistics", "snippet"}).Id(videoId)
-	response, err := call.Do()
-	if err != nil {
-		log.Fatalf("Error making API call: %v", err)
+	winnerTitle := ""
+	var winnerLikes uint64 = 0
+	var winnerViews uint64 = 0
+
+	var totalLikes uint64 = 0
+
+	for _, option := range localConfig.PollOptions {
+		// Call the API to get the video's statistics
+		videoId := option
+		call := service.Videos.List([]string{"statistics", "snippet"}).Id(videoId)
+		response, err := call.Do()
+		if err != nil {
+			log.Fatalf("Error making API call: %v", err)
+		}
+
+		// Print the video's statistics
+		video := response.Items[0]
+
+		if video.Statistics.LikeCount > winnerLikes {
+			winnerTitle = video.Snippet.Title
+			winnerLikes = video.Statistics.LikeCount
+			winnerViews = video.Statistics.ViewCount
+		}
+
+		totalLikes += video.Statistics.LikeCount
 	}
 
-	// Print the video's statistics
-	video := response.Items[0]
-	fmt.Printf("Video: %s\n", video.Snippet.Title)
-	fmt.Printf("Views: %d\n", video.Statistics.ViewCount)
-	fmt.Printf("Likes: %d\n", video.Statistics.LikeCount)
-	fmt.Printf("Dislikes: %d\n", video.Statistics.DislikeCount)
+	winnerLikesPercent := int(float64(winnerLikes) / float64(totalLikes) * 100)
+
+	fmt.Printf("Winner: %s\n", winnerTitle)
+	fmt.Printf("Likes: %d %d%s\n", winnerLikes, winnerLikesPercent, "%")
+	fmt.Printf("Views: %d\n", winnerViews)
+	fmt.Printf("Total Likes: %d\n", totalLikes)
 }
 
 // Helper function to get an OAuth 2 client from the config

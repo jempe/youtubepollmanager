@@ -1,5 +1,6 @@
 {
 	"channel_id" : "YOUR_CHANNEL_ID_HERE",
-	"main_video_id" : "YOUR_MAIN_VIDEO_ID_HERE"
+	"main_video_id" : "YOUR_MAIN_VIDEO_ID_HERE",
+	"poll_options" :  ["FIRST_OPTION_VIDEO_ID", "SECOND_OPTION_VIDEO_ID", "THIRD_OPTION_VIDEO_ID", "FOURTH_OPTION_VIDEO_ID"]
 }
 
