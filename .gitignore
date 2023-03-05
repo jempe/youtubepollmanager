@@ -13,3 +13,11 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# MACOS file
+.DS_Store
+
+# config and token files
+config/config.json
+config/client_secret.json
+TOKEN_FILE_NAME.json
